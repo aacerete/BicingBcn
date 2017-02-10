@@ -212,6 +212,13 @@ public class Station
         this.electric = electric;
     }
 
+    public double getOcupacio () {
+
+        double ocupacio = (this.getBikes()*100/(this.getBikes()+this.getSlots()));
+
+        return ocupacio;
+    }
+
 
     @Override
     public String toString() {

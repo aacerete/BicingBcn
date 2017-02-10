@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,8 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -52,10 +55,12 @@ public class MainActivityFragment extends Fragment {
         mvMap = (org.osmdroid.views.MapView) view.findViewById(R.id.mvMap);
 
         initializeMap();
-        setZoom();
         setOverlays();
+        setZoom();
+
         //Reactualitza el mapa
         refresh();
+
         mvMap.invalidate();
 
         return view;
@@ -71,29 +76,58 @@ public class MainActivityFragment extends Fragment {
 
     }
 
-    private void putStations (ArrayList<Station> stations){
+    private void putStations (ArrayList<Station> stations) {
 
         setupMarkerOverlay();
 
-        Drawable clusterIconDraw = getResources().getDrawable(R.drawable.ic_station);
-        Bitmap clusterIcon = ((BitmapDrawable)clusterIconDraw).getBitmap();
+        Drawable clusterIconDraw = getResources().getDrawable(R.drawable.ic_bicing_group);
+        Bitmap clusterIcon = ((BitmapDrawable) clusterIconDraw).getBitmap();
 
         bicingmarkerClusterer.setIcon(clusterIcon);
 
-        for (Station station : stations){
+        for (Station station : stations) {
 
             Marker m = new Marker(mvMap);
-            GeoPoint geoPoint = new GeoPoint(station.getLatitude(),station.getLongitude());
+
+            String estat = ("Estació: " + station.getStreetName() + " nº " + station.getStreetNumber()+" / Resten "  + station.getBikes()+" bicis Lliures");
+            m.setTitle(estat);
+
+            GeoPoint geoPoint = new GeoPoint(station.getLatitude(), station.getLongitude());
             m.setPosition(geoPoint);
 
-            m.setAnchor(Marker.ANCHOR_CENTER,Marker.ANCHOR_BOTTOM);
-            m.setIcon(getResources().getDrawable(R.drawable.ic_station));
+            m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            m.setIcon(getResources().getDrawable(R.drawable.ic_bicing_group));
 
-            bicingmarkerClusterer.add(m);
+            if (station.getOcupacio() == 0 && station.isElectric() == false) {
+                m.setIcon(getResources().getDrawable(R.drawable.ic_bycicle_0));
+            } else if (station.getOcupacio() > 0 && station.getOcupacio() <= 25 && station.isElectric() == false) {
+                m.setIcon(getResources().getDrawable(R.drawable.ic_bycicle_25));
+            } else if (station.getOcupacio() > 25 && station.getOcupacio() <= 50 && station.isElectric() == false) {
+                m.setIcon(getResources().getDrawable(R.drawable.ic_bycicle_50));
+            } else if (station.getOcupacio() > 50 && station.getOcupacio() <= 75 && station.isElectric() == false) {
+                m.setIcon(getResources().getDrawable(R.drawable.ic_bycicle_75));
+            } else if (station.getOcupacio() > 75 && station.getOcupacio() <= 100 && station.isElectric() == false) {
+                m.setIcon(getResources().getDrawable(R.drawable.ic_bycicle_100));
+            }else if ((station.getOcupacio() == 0 && station.isElectric() == true)){
+                m.setIcon(getResources().getDrawable(R.drawable.ic_electric_0));
+            }else if (station.getOcupacio() > 0 && station.getOcupacio() <= 25 && station.isElectric() == true) {
+                m.setIcon(getResources().getDrawable(R.drawable.ic_electric_25));
+            } else if (station.getOcupacio() > 25 && station.getOcupacio() <= 50 && station.isElectric() == true) {
+                m.setIcon(getResources().getDrawable(R.drawable.ic_electric_50));
+            } else if (station.getOcupacio() > 50 && station.getOcupacio() <= 75 && station.isElectric() == true) {
+                m.setIcon(getResources().getDrawable(R.drawable.ic_electric_75));
+            } else if (station.getOcupacio() > 75 && station.getOcupacio() <= 100 && station.isElectric() == true) {
+                m.setIcon(getResources().getDrawable(R.drawable.ic_electric_100));
+            }
+
+
+
+                bicingmarkerClusterer.add(m);
+
+
+            bicingmarkerClusterer.invalidate();
+            mvMap.invalidate();
         }
-
-        bicingmarkerClusterer.invalidate();
-        mvMap.invalidate();
     }
 
     private void initializeMap() {
@@ -104,31 +138,41 @@ public class MainActivityFragment extends Fragment {
         mvMap.setMultiTouchControls(true);
 
 
+
     }
 
     private void setZoom() {
         mapController = mvMap.getController();
-        mapController.setCenter(new GeoPoint(41.383333, 2.183333));
+       // mapController.setCenter(new GeoPoint(41.383333, 2.183333));
         mapController.setZoom(15);
     }
 
     private void setOverlays() {
-        final DisplayMetrics dm = getResources().getDisplayMetrics();
+
+
+        //final DisplayMetrics dm = getResources().getDisplayMetrics();
         myLocationOverlay = new MyLocationNewOverlay(
                 new GpsMyLocationProvider(getContext()),
                 mvMap
+
         );
 
+
         myLocationOverlay.enableMyLocation();
+
+
         myLocationOverlay.runOnFirstFix(new Runnable() {
             @Override
             public void run() {
+                Log.d(TAG, "Ha entrado 2");
                 mapController.animateTo(myLocationOverlay.getMyLocation());
+                Log.d(TAG, "Ha entrado");
             }
         });
 
 
         mvMap.getOverlays().add(myLocationOverlay);
+
 
     }
 
