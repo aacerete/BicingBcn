@@ -8,7 +8,7 @@
     tools:context="com.example.a46990527d.bicingbcn.MainActivityFragment"
     tools:showIn="@layout/activity_main">
 
-    <com.google.android.gms.maps.MapView
+    <org.osmdroid.views.MapView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:id="@+id/mvMap"
