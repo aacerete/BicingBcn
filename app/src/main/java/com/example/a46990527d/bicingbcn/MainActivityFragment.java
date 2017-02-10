@@ -4,20 +4,22 @@ import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.*;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.MinimapOverlay;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
-import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -37,6 +39,8 @@ public class MainActivityFragment extends Fragment {
     private ScaleBarOverlay mScaleBarOverlay;
     private CompassOverlay mCompassOverlay;
 
+    private RadiusMarkerClusterer bicingmarkerClusterer;
+
     public MainActivityFragment() {
     }
 
@@ -51,10 +55,45 @@ public class MainActivityFragment extends Fragment {
         setZoom();
         setOverlays();
         //Reactualitza el mapa
+        refresh();
         mvMap.invalidate();
 
         return view;
 
+    }
+
+    private void setupMarkerOverlay() {
+
+       bicingmarkerClusterer = new RadiusMarkerClusterer(getContext());
+       mvMap.getOverlays().add(bicingmarkerClusterer);
+       bicingmarkerClusterer.setRadius(100);
+
+
+    }
+
+    private void putStations (ArrayList<Station> stations){
+
+        setupMarkerOverlay();
+
+        Drawable clusterIconDraw = getResources().getDrawable(R.drawable.ic_station);
+        Bitmap clusterIcon = ((BitmapDrawable)clusterIconDraw).getBitmap();
+
+        bicingmarkerClusterer.setIcon(clusterIcon);
+
+        for (Station station : stations){
+
+            Marker m = new Marker(mvMap);
+            GeoPoint geoPoint = new GeoPoint(station.getLatitude(),station.getLongitude());
+            m.setPosition(geoPoint);
+
+            m.setAnchor(Marker.ANCHOR_CENTER,Marker.ANCHOR_BOTTOM);
+            m.setIcon(getResources().getDrawable(R.drawable.ic_station));
+
+            bicingmarkerClusterer.add(m);
+        }
+
+        bicingmarkerClusterer.invalidate();
+        mvMap.invalidate();
     }
 
     private void initializeMap() {
@@ -69,8 +108,8 @@ public class MainActivityFragment extends Fragment {
 
     private void setZoom() {
         mapController = mvMap.getController();
-       // mapController.setCenter(new GeoPoint(41.383333, 2.183333));
-        mapController.setZoom(20);
+        mapController.setCenter(new GeoPoint(41.383333, 2.183333));
+        mapController.setZoom(15);
     }
 
     private void setOverlays() {
@@ -120,10 +159,7 @@ public class MainActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList<Station> stations) {
 
-            for (Station station : stations){
-
-                Log.d("Carrer", station.getStreetName());
-            }
+            putStations(stations);
 
         }
     }
