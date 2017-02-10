@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.*;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.MinimapOverlay;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
@@ -47,6 +48,10 @@ public class MainActivityFragment extends Fragment {
         mvMap = (org.osmdroid.views.MapView) view.findViewById(R.id.mvMap);
 
         initializeMap();
+        setZoom();
+        setOverlays();
+        //Reactualitza el mapa
+        mvMap.invalidate();
 
         return view;
 
@@ -59,11 +64,13 @@ public class MainActivityFragment extends Fragment {
         mvMap.setBuiltInZoomControls(true);
         mvMap.setMultiTouchControls(true);
 
+
     }
 
     private void setZoom() {
         mapController = mvMap.getController();
-        mapController.setZoom(14);
+        mapController.setCenter(new GeoPoint(41.383333, 2.183333));
+        mapController.setZoom(20);
     }
 
     private void setOverlays() {
@@ -81,23 +88,8 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
-        mScaleBarOverlay = new ScaleBarOverlay(mvMap);
-        mScaleBarOverlay.setCentred(true);
-        mScaleBarOverlay.setScaleBarOffset(dm.widthPixels / 2, 10);
-
-        mCompassOverlay = new CompassOverlay(
-                getContext(),
-                new InternalCompassOrientationProvider(getContext()),
-                mvMap
-        );
-
-        mCompassOverlay.enableCompass();
 
         mvMap.getOverlays().add(myLocationOverlay);
-        mvMap.getOverlays().add(mMinimapOverlay);
-        mvMap.getOverlays().add(mScaleBarOverlay);
-        mvMap.getOverlays().add(mCompassOverlay);
-
 
     }
 
