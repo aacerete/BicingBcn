@@ -64,8 +64,8 @@ public class CridaApi {
 
                 station.setLatitude( Double.parseDouble(jsonStation.getString("latitude")));
                 station.setLongitude( Double.parseDouble(jsonStation.getString("longitude")));
-                station.setStreetName(jsonStation.getString("streetname"));
-                station.setStreetNumber(jsonStation.getString("streetnumber"));
+                station.setStreetName(jsonStation.getString("streetName"));
+                station.setStreetNumber(jsonStation.getString("streetNumber"));
                 station.setAltitude( Double.parseDouble(jsonStation.getString("altitude")));
                 station.setSlots(Integer.parseInt(jsonStation.getString("slots")));
                 station.setBikes(Integer.parseInt(jsonStation.getString("bikes")));
