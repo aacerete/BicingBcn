@@ -69,7 +69,7 @@ public class MainActivityFragment extends Fragment {
 
     private void setZoom() {
         mapController = mvMap.getController();
-        mapController.setCenter(new GeoPoint(41.383333, 2.183333));
+       // mapController.setCenter(new GeoPoint(41.383333, 2.183333));
         mapController.setZoom(20);
     }
 
