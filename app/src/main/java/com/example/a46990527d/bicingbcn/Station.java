@@ -10,17 +10,18 @@ import java.util.Map;
 public class Station
 {
 
-    private String id;
+    private int id;
     private String type;
-    private String latitude;
-    private String longitude;
+    private double latitude;
+    private double longitude;
     private String streetName;
     private String streetNumber;
-    private String altitude;
-    private String slots;
-    private String bikes;
+    private double altitude;
+    private int slots;
+    private int bikes;
     private String nearbyStations;
     private String status;
+    private boolean electric;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     private final static long serialVersionUID = 2731682053254378586L;
 
@@ -45,7 +46,7 @@ public class Station
      * @param latitude
      * @param type
      */
-    public Station(String id, String type, String latitude, String longitude, String streetName, String streetNumber, String altitude, String slots, String bikes, String nearbyStations, String status) {
+    public Station(int id, String type, double latitude, double longitude, String streetName, String streetNumber, double altitude, int slots, int bikes, String nearbyStations, String status) {
         super();
         this.id = id;
         this.type = type;
@@ -60,15 +61,15 @@ public class Station
         this.status = status;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Station withId(String id) {
+    public Station withId(int id) {
         this.id = id;
         return this;
     }
@@ -86,28 +87,28 @@ public class Station
         return this;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public Station withLatitude(String latitude) {
+    public Station withLatitude(double latitude) {
         this.latitude = latitude;
         return this;
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public Station withLongitude(String longitude) {
+    public Station withLongitude(double longitude) {
         this.longitude = longitude;
         return this;
     }
@@ -138,41 +139,41 @@ public class Station
         return this;
     }
 
-    public String getAltitude() {
+    public double getAltitude() {
         return altitude;
     }
 
-    public void setAltitude(String altitude) {
+    public void setAltitude(double altitude) {
         this.altitude = altitude;
     }
 
-    public Station withAltitude(String altitude) {
+    public Station withAltitude(double altitude) {
         this.altitude = altitude;
         return this;
     }
 
-    public String getSlots() {
+    public int getSlots() {
         return slots;
     }
 
-    public void setSlots(String slots) {
+    public void setSlots(int slots) {
         this.slots = slots;
     }
 
-    public Station withSlots(String slots) {
+    public Station withSlots(int slots) {
         this.slots = slots;
         return this;
     }
 
-    public String getBikes() {
+    public int getBikes() {
         return bikes;
     }
 
-    public void setBikes(String bikes) {
+    public void setBikes(int bikes) {
         this.bikes = bikes;
     }
 
-    public Station withBikes(String bikes) {
+    public Station withBikes(int bikes) {
         this.bikes = bikes;
         return this;
     }
@@ -203,20 +204,30 @@ public class Station
         return this;
     }
 
+    public boolean isElectric() {
+        return electric;
+    }
+
+    public void setElectric(boolean electric) {
+        this.electric = electric;
+    }
+
+
     @Override
     public String toString() {
         return "Station{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", type='" + type + '\'' +
-                ", latitude='" + latitude + '\'' +
-                ", longitude='" + longitude + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
                 ", streetName='" + streetName + '\'' +
                 ", streetNumber='" + streetNumber + '\'' +
-                ", altitude='" + altitude + '\'' +
-                ", slots='" + slots + '\'' +
-                ", bikes='" + bikes + '\'' +
+                ", altitude=" + altitude +
+                ", slots=" + slots +
+                ", bikes=" + bikes +
                 ", nearbyStations='" + nearbyStations + '\'' +
                 ", status='" + status + '\'' +
+                ", electric=" + electric +
                 ", additionalProperties=" + additionalProperties +
                 '}';
     }
